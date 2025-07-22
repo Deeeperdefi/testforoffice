@@ -118,10 +118,10 @@ async def ask_to_join_channel(update: Update, context: ContextTypes.DEFAULT_TYPE
     reply_markup = InlineKeyboardMarkup(keyboard)
     
     message = (
-        "Task 1: Please join our Telegram Channel.\n\n"
-        "After joining, please send a screenshot as proof.\n\n"
-        "*Warning:* Do not attempt to cheat the system. All task submissions are manually verified, "
-        "and submitting fake proof will result in your withdrawal being declined."
+        "Task 1: Please join our Telegram Channel\\.\n\n"
+        "After joining, please send a screenshot as proof\\.\n\n"
+        "*Warning:* Do not attempt to cheat the system\\. All task submissions are manually verified, "
+        "and submitting fake proof will result in your withdrawal being declined\\."
     )
 
     await update.message.reply_text(
@@ -149,10 +149,10 @@ async def ask_to_join_group(update: Update, context: ContextTypes.DEFAULT_TYPE) 
     reply_markup = InlineKeyboardMarkup(keyboard)
     
     message = (
-        "Task 2: Now, please join our Telegram Group.\n\n"
-        "After joining, please send a screenshot as proof.\n\n"
-        "*Warning:* Do not attempt to cheat the system. All task submissions are manually verified, "
-        "and submitting fake proof will result in your withdrawal being declined."
+        "Task 2: Now, please join our Telegram Group\\.\n\n"
+        "After joining, please send a screenshot as proof\\.\n\n"
+        "*Warning:* Do not attempt to cheat the system\\. All task submissions are manually verified, "
+        "and submitting fake proof will result in your withdrawal being declined\\."
     )
 
     await update.message.reply_text(
@@ -180,10 +180,10 @@ async def ask_to_follow_twitter(update: Update, context: ContextTypes.DEFAULT_TY
     reply_markup = InlineKeyboardMarkup(keyboard)
     
     message = (
-        "Task 3: Please follow our official Twitter account.\n\n"
-        "After following, please send a screenshot as proof.\n\n"
-        "*Warning:* Do not attempt to cheat the system. All task submissions are manually verified, "
-        "and submitting fake proof will result in your withdrawal being declined."
+        "Task 3: Please follow our official Twitter account\\.\n\n"
+        "After following, please send a screenshot as proof\\.\n\n"
+        "*Warning:* Do not attempt to cheat the system\\. All task submissions are manually verified, "
+        "and submitting fake proof will result in your withdrawal being declined\\."
     )
     
     await update.message.reply_text(
@@ -211,10 +211,10 @@ async def ask_to_follow_medium(update: Update, context: ContextTypes.DEFAULT_TYP
     reply_markup = InlineKeyboardMarkup(keyboard)
     
     message = (
-        "Task 4: Please follow us on Medium.\n\n"
-        "After following, please send a screenshot as proof.\n\n"
-        "*Warning:* Do not attempt to cheat the system. All task submissions are manually verified, "
-        "and submitting fake proof will result in your withdrawal being declined."
+        "Task 4: Please follow us on Medium\\.\n\n"
+        "After following, please send a screenshot as proof\\.\n\n"
+        "*Warning:* Do not attempt to cheat the system\\. All task submissions are manually verified, "
+        "and submitting fake proof will result in your withdrawal being declined\\."
     )
     
     await update.message.reply_text(
