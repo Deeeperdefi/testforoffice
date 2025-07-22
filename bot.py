@@ -142,7 +142,7 @@ async def ask_to_join_group(update: Update, context: ContextTypes.DEFAULT_TYPE) 
     reply_markup = InlineKeyboardMarkup(keyboard)
 
     await update.message.reply_text(
-        "Task 2: Now, please join our Telegram Group.",
+        "Task 2: Now, please join our Telegram Group and send a screenshot.",
         reply_markup=reply_markup,
     )
     return AWAIT_GROUP_JOIN
@@ -351,7 +351,7 @@ def main() -> None:
         entry_points=[CommandHandler("start", start)],
         states={
             AWAIT_CHANNEL_JOIN: [MessageHandler(filters.PHOTO | filters.TEXT & ~filters.COMMAND, handle_channel_join)],
-            AWAIT_GROUP_JOIN: [MessageHandler(filters.TEXT & ~filters.COMMAND, handle_group_join)],
+            AWAIT_GROUP_JOIN: [MessageHandler(filters.PHOTO | filters.TEXT & ~filters.COMMAND, handle_group_join)],
             AWAIT_TWITTER_FOLLOW: [CallbackQueryHandler(handle_twitter_follow, pattern="^twitter_done$")],
             AWAIT_MEDIUM_FOLLOW: [CallbackQueryHandler(handle_medium_follow, pattern="^medium_done$")],
             MAIN_MENU: [
