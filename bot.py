@@ -6,11 +6,9 @@ from telegram.ext import Application, CommandHandler, MessageHandler, filters, C
 
 # --- Configuration ---
 # IMPORTANT: Replace these values with your actual data
-BOT_TOKEN = "6911932537:AAEhDv7E3LKPg9RkOrEQAmScEq_watY4Pyg"  # Get this from BotFather on Telegram
-TELEGRAM_CHANNEL_LINK = "https://t.me/ads2defi"
-TELEGRAM_GROUP_LINK = "https://t.me/ads2definews"
-TWITTER_LINK = "https://x.com/ads2defi"
-MEDIUM_LINK = "https://medium.com/@arogunmatidikayode"
+BOT_TOKEN = "7620723944:AAGcwfLenjKg7DGN6GPXSraeV02Wa68zht0"  # Get this from BotFather on Telegram
+TELEGRAM_CHANNEL_LINK = "https://t.me/Agamacoin2025"
+TWITTER_LINK = "https://x.com/Agama_coin?t=AtdDdc0LTvXC-8Ye9I9ZCg&s=09"
 MIN_REFERRALS_FOR_WITHDRAWAL = 10
 REWARD_PER_TASK = 1  # Reward for completing one task
 REWARD_PER_REFERRAL = 3 # Reward for one successful referral
@@ -28,12 +26,10 @@ logger = logging.getLogger(__name__)
 (
     START_ROUTES,
     AWAIT_CHANNEL_JOIN,
-    AWAIT_GROUP_JOIN,
     AWAIT_TWITTER_FOLLOW,
-    AWAIT_MEDIUM_FOLLOW,
     MAIN_MENU,
     AWAIT_WALLET_ADDRESS,
-) = range(7)
+) = range(5)
 
 # --- Data Handling Functions ---
 
@@ -97,8 +93,8 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
             "referred_by": None,
         }
         await update.message.reply_text(
-            f"Welcome to the ads2defi Airdrop, {user.first_name}!\n\n"
-            "Complete a few simple tasks to earn ads2defi tokens."
+            f"Welcome to the AGAMAcoin Airdrop, {user.first_name}!\n\n"
+            "Complete a few simple tasks to earn AGAMAcoin tokens."
         )
 
         # Handle referral
@@ -139,48 +135,27 @@ async def handle_channel_join(update: Update, context: ContextTypes.DEFAULT_TYPE
     data[user_id]["balance"] += REWARD_PER_TASK
     save_user_data(data)
 
-    await update.message.reply_text("Thank you! Let's move to the next task.")
-    return await ask_to_join_group(update, context)
-
-
-async def ask_to_join_group(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
-    """Task 2: Asks the user to join the Telegram group."""
-    keyboard = [[InlineKeyboardButton("Join Group", url=TELEGRAM_GROUP_LINK)]]
-    reply_markup = InlineKeyboardMarkup(keyboard)
-    
     message = (
-        "Task 2: Now, please join our Telegram Group\\.\n\n"
-        "After joining, please send a screenshot as proof\\.\n\n"
-        "*Warning:* Do not attempt to cheat the system\\. All task submissions are manually verified, "
-        "and submitting fake proof will result in your withdrawal being declined\\."
+        "Thank you for your submission\\.\n\n"
+        "⚠️ *Important:* Hope you didn't cheat the system\\. All tasks will be verified manually "
+        "before your airdrop withdrawal is processed\\.\n\n"
+        "Now for the next task\\."
     )
-
     await update.message.reply_text(
         message,
-        reply_markup=reply_markup,
         parse_mode=constants.ParseMode.MARKDOWN_V2
     )
-    return AWAIT_GROUP_JOIN
-
-
-async def handle_group_join(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
-    """Handles the response after asking to join the group."""
-    user_id = get_user_id_str(update)
-    data = load_user_data()
-    data[user_id]["balance"] += REWARD_PER_TASK
-    save_user_data(data)
-
-    await update.message.reply_text("Great! Just two more tasks left.")
+    
     return await ask_to_follow_twitter(update, context)
 
 
 async def ask_to_follow_twitter(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
-    """Task 3: Asks the user to follow on Twitter."""
+    """Task 2: Asks the user to follow on Twitter."""
     keyboard = [[InlineKeyboardButton("Follow on Twitter", url=TWITTER_LINK)]]
     reply_markup = InlineKeyboardMarkup(keyboard)
     
     message = (
-        "Task 3: Please follow our official Twitter account\\.\n\n"
+        "Task 2: Please follow our official Twitter account\\.\n\n"
         "After following, please send a screenshot as proof\\.\n\n"
         "*Warning:* Do not attempt to cheat the system\\. All task submissions are manually verified, "
         "and submitting fake proof will result in your withdrawal being declined\\."
@@ -195,38 +170,7 @@ async def ask_to_follow_twitter(update: Update, context: ContextTypes.DEFAULT_TY
 
 
 async def handle_twitter_follow(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
-    """Handles the response after asking to follow on Twitter."""
-    user_id = get_user_id_str(update)
-    data = load_user_data()
-    data[user_id]["balance"] += REWARD_PER_TASK
-    save_user_data(data)
-
-    await update.message.reply_text("Excellent! One last task.")
-    return await ask_to_follow_medium(update, context)
-
-
-async def ask_to_follow_medium(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
-    """Task 4: Asks the user to follow on Medium."""
-    keyboard = [[InlineKeyboardButton("Follow on Medium", url=MEDIUM_LINK)]]
-    reply_markup = InlineKeyboardMarkup(keyboard)
-    
-    message = (
-        "Task 4: Please follow us on Medium\\.\n\n"
-        "After following, please send a screenshot as proof\\.\n\n"
-        "*Warning:* Do not attempt to cheat the system\\. All task submissions are manually verified, "
-        "and submitting fake proof will result in your withdrawal being declined\\."
-    )
-    
-    await update.message.reply_text(
-        message,
-        reply_markup=reply_markup,
-        parse_mode=constants.ParseMode.MARKDOWN_V2
-    )
-    return AWAIT_MEDIUM_FOLLOW
-
-
-async def handle_medium_follow(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
-    """Handles the response after asking to follow on Medium and completes the tasks."""
+    """Handles the response after asking to follow on Twitter and completes the tasks."""
     user_id = get_user_id_str(update)
     data = load_user_data()
 
@@ -283,7 +227,7 @@ async def balance_button(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
 
     await query.message.reply_text(
         f"Your current status:\n\n"
-        f"💰 Balance: ${balance} ads2defi\n"
+        f"💰 Balance: ${balance} AGAMAcoin\n"
         f"👥 Referrals: {referrals}"
     )
     return MAIN_MENU
@@ -299,7 +243,7 @@ async def referral_button(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
 
     message = (
         f"Your unique referral link is:\n\n`{escape_markdown(referral_link)}`\n\n"
-        f"Share this link with your friends\\. You will earn ${REWARD_PER_REFERRAL} ads2defi for each friend who joins and completes all the tasks\\."
+        f"Share this link with your friends\\. You will earn ${REWARD_PER_REFERRAL} AGAMAcoin for each friend who joins and completes all the tasks\\."
     )
 
     await query.message.reply_text(message, parse_mode=constants.ParseMode.MARKDOWN_V2)
@@ -321,7 +265,7 @@ async def withdraw_button(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
     if user_data.get("referrals", 0) >= MIN_REFERRALS_FOR_WITHDRAWAL:
         await query.message.reply_text(
             "Congratulations! You are eligible for withdrawal.\n\n"
-            "Please enter your BEP-20 (Binance Smart Chain) wallet address to receive your ads2defi tokens."
+            "Please enter your BEP-20 (Binance Smart Chain) wallet address to receive your AGAMAcoin tokens."
         )
         return AWAIT_WALLET_ADDRESS
     else:
@@ -371,9 +315,7 @@ def main() -> None:
         entry_points=[CommandHandler("start", start)],
         states={
             AWAIT_CHANNEL_JOIN: [MessageHandler(filters.PHOTO | filters.TEXT & ~filters.COMMAND, handle_channel_join)],
-            AWAIT_GROUP_JOIN: [MessageHandler(filters.PHOTO | filters.TEXT & ~filters.COMMAND, handle_group_join)],
             AWAIT_TWITTER_FOLLOW: [MessageHandler(filters.PHOTO | filters.TEXT & ~filters.COMMAND, handle_twitter_follow)],
-            AWAIT_MEDIUM_FOLLOW: [MessageHandler(filters.PHOTO | filters.TEXT & ~filters.COMMAND, handle_medium_follow)],
             MAIN_MENU: [
                 CallbackQueryHandler(balance_button, pattern="^balance$"),
                 CallbackQueryHandler(referral_button, pattern="^referral$"),
