@@ -227,9 +227,13 @@ async def handle_medium_follow(update: Update, context: ContextTypes.DEFAULT_TYP
 
     save_user_data(data)
 
+    message = (
+        "🎉 All tasks completed\\! Thank you for your participation\\.\n\n"
+        "⚠️ *Important:* Hope you didn't cheat the system\\. All tasks will be verified manually before your airdrop withdrawal is processed\\."
+    )
     await query.edit_message_text(
-        "🎉 All tasks completed! Thank you for your participation.\n\n"
-        "⚠️ *Important:* Hope you didn't cheat the system. All tasks will be verified manually before your airdrop withdrawal is processed."
+        message,
+        parse_mode=constants.ParseMode.MARKDOWN_V2
     )
     await show_main_menu(update, context, "You can now check your balance or get your referral link.")
     return MAIN_MENU
@@ -279,7 +283,7 @@ async def referral_button(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
 
     message = (
         f"Your unique referral link is:\n\n`{escape_markdown(referral_link)}`\n\n"
-        f"Share this link with your friends. You will earn ${REWARD_PER_REFERRAL} ads2defi for each friend who joins and completes all the tasks."
+        f"Share this link with your friends\\. You will earn ${REWARD_PER_REFERRAL} ads2defi for each friend who joins and completes all the tasks\\."
     )
 
     await query.message.reply_text(message, parse_mode=constants.ParseMode.MARKDOWN_V2)
