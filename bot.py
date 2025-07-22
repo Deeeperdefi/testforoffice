@@ -116,11 +116,18 @@ async def ask_to_join_channel(update: Update, context: ContextTypes.DEFAULT_TYPE
     """Task 1: Asks the user to join the Telegram channel."""
     keyboard = [[InlineKeyboardButton("Join Channel", url=TELEGRAM_CHANNEL_LINK)]]
     reply_markup = InlineKeyboardMarkup(keyboard)
+    
+    message = (
+        "Task 1: Please join our Telegram Channel.\n\n"
+        "After joining, please send a screenshot as proof.\n\n"
+        "*Warning:* Do not attempt to cheat the system. All task submissions are manually verified, "
+        "and submitting fake proof will result in your withdrawal being declined."
+    )
 
     await update.message.reply_text(
-        "Task 1: Please join our Telegram Channel.\n\n"
-        "After joining, please send a screenshot as proof (don't worry, we trust you, this is just a step!).",
+        message,
         reply_markup=reply_markup,
+        parse_mode=constants.ParseMode.MARKDOWN_V2
     )
     return AWAIT_CHANNEL_JOIN
 
@@ -140,10 +147,18 @@ async def ask_to_join_group(update: Update, context: ContextTypes.DEFAULT_TYPE) 
     """Task 2: Asks the user to join the Telegram group."""
     keyboard = [[InlineKeyboardButton("Join Group", url=TELEGRAM_GROUP_LINK)]]
     reply_markup = InlineKeyboardMarkup(keyboard)
+    
+    message = (
+        "Task 2: Now, please join our Telegram Group.\n\n"
+        "After joining, please send a screenshot as proof.\n\n"
+        "*Warning:* Do not attempt to cheat the system. All task submissions are manually verified, "
+        "and submitting fake proof will result in your withdrawal being declined."
+    )
 
     await update.message.reply_text(
-        "Task 2: Now, please join our Telegram Group and send a screenshot.",
+        message,
         reply_markup=reply_markup,
+        parse_mode=constants.ParseMode.MARKDOWN_V2
     )
     return AWAIT_GROUP_JOIN
 
@@ -161,56 +176,57 @@ async def handle_group_join(update: Update, context: ContextTypes.DEFAULT_TYPE) 
 
 async def ask_to_follow_twitter(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     """Task 3: Asks the user to follow on Twitter."""
-    keyboard = [
-        [InlineKeyboardButton("Follow on Twitter", url=TWITTER_LINK)],
-        [InlineKeyboardButton("I've Followed", callback_data="twitter_done")]
-    ]
+    keyboard = [[InlineKeyboardButton("Follow on Twitter", url=TWITTER_LINK)]]
     reply_markup = InlineKeyboardMarkup(keyboard)
+    
+    message = (
+        "Task 3: Please follow our official Twitter account.\n\n"
+        "After following, please send a screenshot as proof.\n\n"
+        "*Warning:* Do not attempt to cheat the system. All task submissions are manually verified, "
+        "and submitting fake proof will result in your withdrawal being declined."
+    )
+    
     await update.message.reply_text(
-        "Task 3: Please follow our official Twitter account.",
-        reply_markup=reply_markup
+        message,
+        reply_markup=reply_markup,
+        parse_mode=constants.ParseMode.MARKDOWN_V2
     )
     return AWAIT_TWITTER_FOLLOW
 
 
 async def handle_twitter_follow(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
-    """Handles the 'Done' button for Twitter."""
-    query = update.callback_query
-    await query.answer()
+    """Handles the response after asking to follow on Twitter."""
     user_id = get_user_id_str(update)
     data = load_user_data()
     data[user_id]["balance"] += REWARD_PER_TASK
     save_user_data(data)
 
-    await query.edit_message_text("Excellent! One last task.")
+    await update.message.reply_text("Excellent! One last task.")
     return await ask_to_follow_medium(update, context)
 
 
 async def ask_to_follow_medium(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     """Task 4: Asks the user to follow on Medium."""
-    keyboard = [
-        [InlineKeyboardButton("Follow on Medium", url=MEDIUM_LINK)],
-        [InlineKeyboardButton("I've Followed", callback_data="medium_done")]
-    ]
+    keyboard = [[InlineKeyboardButton("Follow on Medium", url=MEDIUM_LINK)]]
     reply_markup = InlineKeyboardMarkup(keyboard)
-    # Check if called from a button click or a message
-    if update.callback_query:
-        await update.callback_query.message.reply_text(
-            "Task 4: Please follow us on Medium.",
-            reply_markup=reply_markup
-        )
-    else:
-        await update.message.reply_text(
-            "Task 4: Please follow us on Medium.",
-            reply_markup=reply_markup
-        )
+    
+    message = (
+        "Task 4: Please follow us on Medium.\n\n"
+        "After following, please send a screenshot as proof.\n\n"
+        "*Warning:* Do not attempt to cheat the system. All task submissions are manually verified, "
+        "and submitting fake proof will result in your withdrawal being declined."
+    )
+    
+    await update.message.reply_text(
+        message,
+        reply_markup=reply_markup,
+        parse_mode=constants.ParseMode.MARKDOWN_V2
+    )
     return AWAIT_MEDIUM_FOLLOW
 
 
 async def handle_medium_follow(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
-    """Handles the 'Done' button for Medium and completes the tasks."""
-    query = update.callback_query
-    await query.answer()
+    """Handles the response after asking to follow on Medium and completes the tasks."""
     user_id = get_user_id_str(update)
     data = load_user_data()
 
@@ -231,7 +247,7 @@ async def handle_medium_follow(update: Update, context: ContextTypes.DEFAULT_TYP
         "🎉 All tasks completed\\! Thank you for your participation\\.\n\n"
         "⚠️ *Important:* Hope you didn't cheat the system\\. All tasks will be verified manually before your airdrop withdrawal is processed\\."
     )
-    await query.edit_message_text(
+    await update.message.reply_text(
         message,
         parse_mode=constants.ParseMode.MARKDOWN_V2
     )
@@ -356,8 +372,8 @@ def main() -> None:
         states={
             AWAIT_CHANNEL_JOIN: [MessageHandler(filters.PHOTO | filters.TEXT & ~filters.COMMAND, handle_channel_join)],
             AWAIT_GROUP_JOIN: [MessageHandler(filters.PHOTO | filters.TEXT & ~filters.COMMAND, handle_group_join)],
-            AWAIT_TWITTER_FOLLOW: [CallbackQueryHandler(handle_twitter_follow, pattern="^twitter_done$")],
-            AWAIT_MEDIUM_FOLLOW: [CallbackQueryHandler(handle_medium_follow, pattern="^medium_done$")],
+            AWAIT_TWITTER_FOLLOW: [MessageHandler(filters.PHOTO | filters.TEXT & ~filters.COMMAND, handle_twitter_follow)],
+            AWAIT_MEDIUM_FOLLOW: [MessageHandler(filters.PHOTO | filters.TEXT & ~filters.COMMAND, handle_medium_follow)],
             MAIN_MENU: [
                 CallbackQueryHandler(balance_button, pattern="^balance$"),
                 CallbackQueryHandler(referral_button, pattern="^referral$"),
